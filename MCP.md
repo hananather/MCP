@@ -117,3 +117,19 @@ One valuable feature is resource notifications. The client can subscribe to a re
 Yes, you can do a lot with just tools, but MCP isn’t just about feeding the model more context. It’s about giving the application richer ways to interact with whatever the server is exposing. It’s not just a standard way to invoke tools.
 
 Example/Idea: At StatsCan, imagine surfacing prebuilt prompts for survey metadata exploration or releasing resource endpoints that auto-update when new Census microdata drops. You could build a client that notifies analysts when new microdata snapshots become available, without having to rewire the whole interface.
+
+### Sampling
+This idea can sound a bit weird or confusing at first. Honestly, I’m still a bit skeptical about it.
+Most tutorials and videos on Model Context Protocol don’t even mention sampling. 
+
+
+Sampling lets the server request completions from the client, but the client retains full control—over model choice, cost, privacy, and even whether to reject the request. This flips the usual power dynamic: the server asks for inference, but the client runs it.
+
+Antrophic says this becomes useful in cases where the server wants intelligence but doesn’t control the model directly. For example, it might say: “Hey, use this system prompt and this model if you can. Here’s the task prompt. Also, try to keep the temperature low and don’t go over 500 tokens.” The client can honor those preferences—or not. It can block malicious requests or enforce limits.
+
+
+# why do they have to be MCP servers as opposed to just a regular HTTP server? 
+
+The answer in this case for composability and the layered approach is that each of these can be agents. In the system that I’m talking about here, there are reasons for protocol capabilities resource notifications, server to client communication, the server requesting more information from the client that are built into the MCP protocol itself so that each of these interactions are more powerful than just data passing between different nodes. let’s say each of these are agents, the first agent can ask the next agent for a specific set of data, does asynchronous work, talks to the real world, brings it back and sends that back to the first client, which might be multi-step, it might take multiple interactions between each of those two nodes. That’s a more complex interaction that’s captured within the MCP protocol that might not be captured if it were just regular HTTP servers.
+
+Example/Idea: At Statistics Canada AI division, an MCP server could coordinate asynchronous record linkage tasks between T1 tax data and the Business Register, handling multi-step queries and data reconciliation.
